@@ -5,6 +5,7 @@
 library(tidyverse)
 
 source('config.R')
+source.path <- paste(im.path, "dataprep/jrn011_npp/field", sep='/')
 output.path <- paste(im.path, 'Core_packages/210011002_npp_quadmeas', sep='/')
 
 # Output data file name
@@ -13,7 +14,7 @@ f_out <- paste(output.path, "jrn011002_npp_quadrat_meas.test.csv", sep='/')
 
 # Read in data file from Heather that goes to 2017
 # Need to figure out origin of this...
-df1 <- read_csv(paste0(dsource1,"/Jornada_011002_npp_quad_data.csv"),
+df1 <- read_csv(paste(source.path, "Jornada_011002_npp_quad_data.csv", sep='/'),
                 skip=40, na = c(".", ""),
                 col_types = cols(
                   fileid = col_character(),
@@ -55,12 +56,12 @@ df1 %>% filter(spp=='MISS') %>% count() # so is miss the same as NONE?
 # These files vary a little in format (columns come and go), and I don't
 # really trust the taxonomic columns
 count <- 1
-for (y in c(2018, 2019, 2020, 2021, 2022)){
-  fname_w <- paste0(dsource1, 'quad/nppq', y, 'w_gm.DAT')
+for (y in c(2018, 2019, 2020, 2021, 2022, 2023, 2024)){
+  fname_w <- paste0(source.path, '/quad/nppq', y, 'w_gm.DAT')
   df_w <- read_delim(fname_w, delim=' ', na = c(".", "", "NA"))
-  fname_s <- paste0(dsource1, 'quad/nppq', y, 's_gm.DAT')
+  fname_s <- paste0(source.path, '/quad/nppq', y, 's_gm.DAT')
   df_s <- read_delim(fname_s, delim=' ', na = c(".", "", "NA"))
-  fname_f <- paste0(dsource1, 'quad/nppq', y, 'f_gm.DAT')
+  fname_f <- paste0(source.path, '/quad/nppq', y, 'f_gm.DAT')
   df_f <- read_delim(fname_f, delim=' ', na = c(".", "", "NA"))
   if (count == 1){
     df2 <- bind_rows(df_w, df_s, df_f)
@@ -113,8 +114,8 @@ sapply(df.all, function(x) sum(is.na(x)))
 
 # Get the taxonomic merge code
 ## The chdir argument lets the sourced script use relative paths
-source('../../TaxonomicCoverage/taxa_code_merge.R', chdir=TRUE)
-tm <- merge_crossref_taxa(df.all, 'spp')
+source('R/taxa_code_merge.R', chdir=TRUE)
+tm <- merge_crossref_taxa(df.all, 'spp', paste(im.path, 'TaxonomicCoverage', sep='/'))
 
 unmapped <- tm$unmapped_codes
 # Check record...
