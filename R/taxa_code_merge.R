@@ -11,23 +11,25 @@ library('tidyverse')
 merge_crossref_taxa <- function(df, 
         df_ltercol,
         crossref_path="",
-        df_keepcol=NULL,
+        df_keepcol=NULL, # An additional set of colums to retain in the output
 				crossref_name="LTER_to_USDA_PLANTS_codes.csv",
 				crossref_ltercol="LTER_code",
 				crossref_codecol="USDA_code"){
-  # Load the crossref fild
+  # Load the JRN LTER code crossref file. This file lists all known LTER 
+  # codes and links them to a species binomial and taxonomic authority code
   crossref <- read_csv(paste(crossref_path, crossref_name, sep='/'))
 
-  # Get a list of unique species codes in the data set
+  # Get a list of unique JRN LTER species codes in the data set
   spp_codes <- df %>%
     dplyr::select(all_of(df_ltercol), all_of(df_keepcol)) %>% 
     dplyr::distinct()
 
-  # Merge unique species list with species codes
+  # Merge unique JRN species codes with the LTER field codes
+  # Crossw
   spp_list <- merge(x = spp_codes, y = crossref, 
 		    by.x = df_ltercol, 
 		    by.y = crossref_ltercol,
-		    all.x = TRUE)
+		    all.x = TRUE) # Should there be all.y?
 
   # Verify list of unique codes is the same length as list of merged codes
   codelengthcheck <- nrow(spp_list) == nrow(spp_codes)
@@ -67,5 +69,5 @@ merge_crossref_taxa <- function(df,
       message("RETURNED DATAFRAME IS NOT THE SAME SIZE!")
   }
 
-  return(list("merged" = df_edit, "unmapped_codes" = codes_unmapped))
+  return(list("plant_list" = spp_list, "unmapped_codes" = codes_unmapped, "merged" = df_edit))
 }

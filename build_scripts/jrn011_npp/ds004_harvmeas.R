@@ -35,8 +35,9 @@ sapply(df_in, function(x) sum(is.na(x)))
 source('R/taxa_code_merge.R', chdir=TRUE)
 tm <- merge_crossref_taxa(df_in, 'spp', paste(im.path, 'TaxonomicCoverage', sep='/'))
 
-df.export <- tm$merged %>%
-  select(everything(), comment = comment, -usda_plants_crossref_comment)
+df.export <- df_in
+#df.export <- tm$merged %>%
+#  select(everything(), comment = comment, -usda_plants_crossref_comment)
 
 # Check for NAs and unique values of catvars
 sapply(df.export, function(x) sum(is.na(x)))
@@ -45,15 +46,28 @@ unique(df.export$year)
 unique(df.export$season)
 unique(df.export$zone)
 unique(df.export$site)
-# Note that extra forms and cpaths are in the database for these (categories
-# that may not appear in data)
-unique(df.export$form)
-unique(df.export$habit)
-unique(df.export$cpath)
-unique(df.export$spp) # 226
-unique(df.export$USDA_code) # 165
 
 # Export df.export as a csv to current directory
 options(scipen=999)   # turns of scientific notation
 write.csv(df.export, f_out, quote=F, row.names=F)
+
+# Now the plantlist
+
+# Output data file name
+f_out <- paste(output.path, "jrn011004_plant_codes.csv", sep='/')
+
+df.plantlist <- tm$plant_list %>%
+  select(everything(), -usda_plants_crossref_comment)
+
+# Note that extra forms and cpaths are in the database for these (categories
+# that may not appear in data)
+unique(df.plantlist$form)
+unique(df.plantlist$habit)
+unique(df.plantlist$cpath)
+unique(df.plantlist$spp) # 226
+unique(df.plantlist$USDA_code) # 165
+
+# Export df.export as a csv to current directory
+options(scipen=999)   # turns of scientific notation
+write.csv(df.plantlist, f_out, quote=F, row.names=F)
 

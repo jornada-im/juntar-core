@@ -14,8 +14,11 @@ This is a collection of code and documentation for preparation and quality assur
 |   |   `-- ds008_rodent.R   -     Build dataset 008
 |   |-- jrn413_csis          -   JRN Study 413: Cross-scale
 |   `-- (...)                -   Many more projects...
-|-- config                   - Some configurations
+|-- config.R                 - Some configurations
 |-- py                       - Common Python files
 |-- R                        - Common R files
 `-- README.md                - This file
 ```
+
+## Preparing a dataset for publication
+
