@@ -41,7 +41,7 @@ df1 <- read_csv(paste(source.path, "Jornada_011002_npp_quad_data.csv", sep='/'),
   mutate(date = as.Date(date, "%m/%d/%Y"))
 
 # There are some missing spp codes:
-#df1 %>% filter(is.na(spp)) %>% View() # not sure what to do with these
+# df1 %>% filter(is.na(spp)) %>% View() # not sure what to do with these
 
 # Check missing data/bareground
 # NONE is bareground (e.g. no vegetation)
@@ -92,10 +92,14 @@ df2 %>% filter(is.na(cnt) & is.na(cover) & spp != 'NONE') #zero, thats good
 df2 %>% filter(is.na(cover) & spp != 'NONE')
 df2 %>% filter(is.na(cnt) & spp != 'NONE')
 
+#There were some lowercase categoricals in the `phen` column that should be caps
+df2$phen[grepl("v", df2$phen)] <- "V"
+df2$phen[grepl("f", df2$phen)] <- "F"
+
 df.all <- bind_rows(df1, df2) %>%
   select(-form, -habit, -cpath)
 
-# Remove commas in comments column
+# Replace commas in comments column with semicolons
 df.all$comment <- gsub(",", ";", df.all$comment)
 
 # unique values
@@ -123,15 +127,33 @@ df.all %>% filter(spp=='PECY')
 # SPOR1S = Sporobolus species seedling?
 # YUELLS = Yucca elata leaf seedling?
 
-df.export <- tm$merged
+df.export <- df.all # tm$merged
 
 # Check for NAs and unique values of catvars
 sapply(df.export, function(x) sum(is.na(x)))
-unique(df.export$habit)
-unique(df.export$form)
-unique(df.export$cpath)
 
 # Export df.export as a csv to current directory
 options(scipen=999)   # turns of scientific notation
 write.csv(df.export, f_out, quote=F, row.names=F)
+
+
+# Now the plantlist
+
+# Output data file name
+f_out <- paste(output.path, "jrn011002_plant_codes.csv", sep='/')
+
+df.plantlist <- tm$plant_list %>%
+  select(everything(), -usda_plants_crossref_comment)
+
+# Note that extra forms and cpaths are in the database for these (categories
+# that may not appear in data)
+unique(df.plantlist$form)
+unique(df.plantlist$habit)
+unique(df.plantlist$cpath)
+unique(df.plantlist$spp) # 226
+unique(df.plantlist$USDA_code) # 165
+
+# Export df.export as a csv to current directory
+options(scipen=999)   # turns of scientific notation
+write.csv(df.plantlist, f_out, quote=F, row.names=F)
 

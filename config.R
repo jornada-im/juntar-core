@@ -1,9 +1,11 @@
 # Ask the user for the root path - usually the Field Crew/IM Sharepoint root
-choose_directory = function(caption = 'Select the path to the Field Crew/IM directory ((Documents_Jornada-FC-IM) synced to your local computer. ') {
+choose_directory = function(caption = 'Select the path to the Field Crew/IM directory (Documents_Jornada-FC-IM) synced to your local computer. ') {
+  message(caption)
+  env <- Sys.getenv()
   if (exists('utils::choose.dir')) {
-    utils::choose.dir(caption = caption) 
+    utils::choose.dir(caption = caption, default = env[["HOME"]]) 
   } else {
-    tcltk::tk_choose.dir(caption = caption)
+    tcltk::tk_choose.dir(caption = caption, default = env[["HOME"]])
   }
 }
 
