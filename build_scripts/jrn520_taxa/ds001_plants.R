@@ -1,36 +1,14 @@
 # ds001_plants.R
 # formerly build_dataset.210520001.R
-# 
-# BOILERPLATE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-# This is a template build script using R to prepare a dataset
-# for EDI. You can safely remove this and other boilerplate
-# and use the rest to design a new R script for your data.
-# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-#
-# !!!!!!!!!
-# When running this script on a nework drive it may be necessary to set the 
-# path based on how you map the drive. i.e.:
-#
-# setwd('/Volumes/unix/path/to/datasets/210.../')
-# setwd('Z:\\windows\path\to\datasets\210...\
-#
-# In rstudio, set the working directory to a path containing the script with:
-# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-#
-# !!!!!!!!!
 
-
-
-# Set the working directory to a local or network share path
-# (this only works in RStudio). 
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 
 library(tidyverse)
 library(readxl)
 
-# Path to incoming source data files
-dsource <- "./source_data/"
+source('config.R')
+output.path <- paste(im.path, 'Core_packages/210520001_taxa_plants', sep='/')
+source.path <- paste(im.path, "dataprep", "jrn520_taxa", "plant_list", sep="/")
 
 # Output data file 1 name
 f_out <- "jrn520001_JornadaPlantList.csv"
@@ -41,7 +19,7 @@ f_out <- "jrn520001_JornadaPlantList.csv"
 f_in1 <- "JRN_plant_species_list_main.xlsx"
 
 # Load data.
-df_in <- read_xlsx(f_in1, skip=4, na=c('.', '', ' ', 'NA'))
+df_in <- read_xlsx(paste0(source.path, "/", f_in1), skip=4, na=c('.', '', ' ', 'NA'))
 names(df_in) <- tolower(names(df_in))
 
 # Add a binomial name column
