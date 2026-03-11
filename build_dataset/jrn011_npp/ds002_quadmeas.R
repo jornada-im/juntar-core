@@ -57,11 +57,11 @@ df1 %>% filter(spp=='MISS') %>% count() # so is miss the same as NONE?
 # really trust the taxonomic columns
 count <- 1
 for (y in c(2018, 2019, 2020, 2021, 2022, 2023, 2024)){
-  fname_w <- paste0(source.path, '/quad/nppq', y, 'w_gm.DAT')
+  fname_w <- paste0(source.path, '/processed/nppq', y, 'w_gm.DAT')
   df_w <- read_delim(fname_w, delim=' ', na = c(".", "", "NA"))
-  fname_s <- paste0(source.path, '/quad/nppq', y, 's_gm.DAT')
+  fname_s <- paste0(source.path, '/processed/nppq', y, 's_gm.DAT')
   df_s <- read_delim(fname_s, delim=' ', na = c(".", "", "NA"))
-  fname_f <- paste0(source.path, '/quad/nppq', y, 'f_gm.DAT')
+  fname_f <- paste0(source.path, '/processed/nppq', y, 'f_gm.DAT')
   df_f <- read_delim(fname_f, delim=' ', na = c(".", "", "NA"))
   if (count == 1){
     df2 <- bind_rows(df_w, df_s, df_f)
