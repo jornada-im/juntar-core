@@ -6,7 +6,7 @@ This is a collection of code and documentation for preparation and quality assur
 
 ```
 |-- analysis                 - Analysis notebooks and scripts
-|-- build_scripts            - Build scripts for data files
+|-- build_dataset            - Build scripts for data files
 |   |-- jrn011_npp           -   JRN Study 011:  NPP study
 |   |   |-- ds002_quadmeas.R -     Build dataset 002
 |   |   `-- (...)            -     ... more scripts
