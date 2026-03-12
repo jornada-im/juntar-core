@@ -5,10 +5,10 @@
 library(tidyverse)
 
 source('config.R')
-output.path <- paste(im.path, 'Core_packages/210011001_npp_detailed_biomass', sep='/')
+out_path <- paste(im_path, 'Core_packages/210011001_npp_detailed_biomass', sep='/')
 
 # Output data file name
-f_out <- paste(output.path, "jrn011001_NPP_quadrat_estimates_SppSiteSeas.test.csv", sep='/')
+f_out <- paste(out_path, "jrn011001_NPP_quadrat_estimates_SppSiteSeas.test.csv", sep='/')
 
 # Input data
 f_in <- 'biomass_reference_test.csv'

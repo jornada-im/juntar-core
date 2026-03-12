@@ -12,7 +12,7 @@ choose_directory = function(caption = "Select the path to the Field Crew/IM dire
 }
 
 #Set the Root path
-root.path <- choose_directory()
+root_path <- choose_directory()
 # Set other paths
-entry.path <- paste(root.path, "dataentry", sep="/")
-im.path <- paste(root.path, "jornada_im", sep="/")
+entry_path <- paste(root_path, "dataentry", sep="/")
+im_path <- paste(root_path, "jornada_im", sep="/")

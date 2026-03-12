@@ -5,16 +5,16 @@
 library(tidyverse)
 
 source('config.R')
-source.path <- paste(im.path, "dataprep/jrn011_npp/field", sep='/')
-output.path <- paste(im.path, 'Core_packages/210011002_npp_quadmeas', sep='/')
+in_path <- paste(im_path, "dataprep/jrn011_npp/field", sep='/')
+out_path <- paste(im_path, 'Core_packages/210011002_npp_quadmeas', sep='/')
 
 # Output data file name
-f_out <- paste(output.path, "jrn011002_npp_quadrat_meas.test.csv", sep='/')
+f_out <- paste(out_path, "jrn011002_npp_quadrat_meas.test.csv", sep='/')
 
 
 # Read in data file from Heather that goes to 2017
 # Need to figure out origin of this...
-df1 <- read_csv(paste(source.path, "Jornada_011002_npp_quad_data.csv", sep='/'),
+df1 <- read_csv(paste(in_path, "Jornada_011002_npp_quad_data.csv", sep='/'),
                 skip=40, na = c(".", ""),
                 col_types = cols(
                   fileid = col_character(),
@@ -57,11 +57,11 @@ df1 %>% filter(spp=='MISS') %>% count() # so is miss the same as NONE?
 # really trust the taxonomic columns
 count <- 1
 for (y in c(2018, 2019, 2020, 2021, 2022, 2023, 2024)){
-  fname_w <- paste0(source.path, '/processed/nppq', y, 'w_gm.DAT')
+  fname_w <- paste0(in_path, '/processed/nppq', y, 'w_gm.DAT')
   df_w <- read_delim(fname_w, delim=' ', na = c(".", "", "NA"))
-  fname_s <- paste0(source.path, '/processed/nppq', y, 's_gm.DAT')
+  fname_s <- paste0(in_path, '/processed/nppq', y, 's_gm.DAT')
   df_s <- read_delim(fname_s, delim=' ', na = c(".", "", "NA"))
-  fname_f <- paste0(source.path, '/processed/nppq', y, 'f_gm.DAT')
+  fname_f <- paste0(in_path, '/processed/nppq', y, 'f_gm.DAT')
   df_f <- read_delim(fname_f, delim=' ', na = c(".", "", "NA"))
   if (count == 1){
     df2 <- bind_rows(df_w, df_s, df_f)
@@ -140,7 +140,7 @@ write.csv(df.export, f_out, quote=F, row.names=F)
 # Now the plantlist
 
 # Output data file name
-f_out <- paste(output.path, "jrn011002_plant_codes.csv", sep='/')
+f_out <- paste(out_path, "jrn011002_plant_codes.csv", sep='/')
 
 df.plantlist <- tm$plant_list %>%
   select(everything(), -usda_plants_crossref_comment)

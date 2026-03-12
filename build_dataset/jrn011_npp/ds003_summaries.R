@@ -5,10 +5,10 @@
 library(tidyverse)
 
 source('config.R')
-output.path <- paste(im.path, 'Core_packages/210011003_npp_summaries', sep='/')
+out_path <- paste(im_path, 'Core_packages/210011003_npp_summaries', sep='/')
 
 # Output data file name
-f_out <- paste(output.path, "jrn011003_NPP_annual_site_summary.test.csv", sep='/')
+f_out <- paste(out_path, "jrn011003_NPP_annual_site_summary.test.csv", sep='/')
 
 # Input data
 f_in <- "npp_annual_test.csv"

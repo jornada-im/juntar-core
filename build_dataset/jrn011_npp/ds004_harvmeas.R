@@ -6,10 +6,10 @@ library(tidyverse)
 library(readxl)
 
 source('config.R')
-output.path <- paste(im.path, 'Core_packages/210011004_npp_harvmeas', sep='/')
+out_path <- paste(im_path, 'Core_packages/210011004_npp_harvmeas', sep='/')
 
 # Output data file name
-f_out <- paste(output.path, "jrn011004_npp_ref_harvest_meas.test.csv", sep='/')
+f_out <- paste(out_path, "jrn011004_npp_ref_harvest_meas.test.csv", sep='/')
 
 # Load the most recent datafile (should be a dated csv exported from the
 # DataArchive folder), remove some columns that John has added, then export a 
@@ -54,7 +54,7 @@ write.csv(df.export, f_out, quote=F, row.names=F)
 # Now the plantlist
 
 # Output data file name
-f_out <- paste(output.path, "jrn011004_plant_codes.csv", sep='/')
+f_out <- paste(out_path, "jrn011004_plant_codes.csv", sep='/')
 
 df.plantlist <- tm$plant_list %>%
   select(everything(), -usda_plants_crossref_comment)
