@@ -5,19 +5,19 @@ This is a collection of code and documentation for preparation and quality assur
 ## Directory Tree
 
 ```
-|-- analysis                 - Analysis notebooks and scripts
-|-- build_dataset            - Build scripts for data files
-|   |-- jrn011_npp           -   JRN Study 011:  NPP study
-|   |   |-- ds002_quadmeas.R -     Build dataset 002
-|   |   `-- (...)            -     ... more scripts
-|   |-- jrn262_ecotone       -   JRN Study 262: Ecotone
-|   |   `-- ds008_rodent.R   -     Build dataset 008
-|   |-- jrn413_csis          -   JRN Study 413: Cross-scale
-|   `-- (...)                -   Many more projects...
-|-- config.R                 - Some configurations
-|-- py                       - Common Python files
-|-- R                        - Common R files
-`-- README.md                - This file
+|-- analysis                       - Analysis notebooks and scripts
+|-- build_dataset                  - Build scripts for data files
+|   |-- jrn011_npp                 -   JRN Study 011:  NPP study
+|   |   |-- jrn011002_quadmeas.R   -     Build dataset 002
+|   |   `-- (...)                  -     ... more scripts
+|   |-- jrn262_ecotone             -   JRN Study 262: Ecotone
+|   |   `-- jrn262008_rodent.R     -     Build dataset 008
+|   |-- jrn413_csis                -   JRN Study 413: Cross-scale
+|   `-- (...)                      -   More projects...
+|-- config.R                       - Configure paths/environment
+|-- py                             - Common Python files
+|-- R                              - Common R files
+`-- README.md                      - This file
 ```
 
 ## Preparing and publishing a dataset
@@ -34,7 +34,7 @@ This is a collection of code and documentation for preparation and quality assur
 4. Publish the dataset to EDI's staging environment (as appropriate):
 
     ```r
-    publish_dataset(210000001, "edi.staging", output.path, "~/Desktop", dry_run=FALSE, s3_upload=TRUE)
+    publish_dataset(210000001, "edi.staging", out_path, "~/Desktop", dry_run=FALSE, s3_upload=TRUE)
     ```
     Note that `dry_run` is set to `FALSE` now.
 5. When you are satisfied with the dataset as it is in the staging environment you can change the EDI environment to "production" and publish there.
