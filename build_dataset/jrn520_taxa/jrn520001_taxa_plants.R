@@ -1,25 +1,24 @@
 # ds001_plants.R
 # formerly build_dataset.210520001.R
 
-
-
 library(tidyverse)
 library(readxl)
 
 source('config.R')
-output.path <- paste(im.path, 'Core_packages/210520001_taxa_plants', sep='/')
-source.path <- paste(im.path, "dataprep", "jrn520_taxa", "plant_list", sep="/")
+out_path <- paste(im_path, 'Core_packages/210520001_taxa_plants', sep='/')
+in_path <- paste(im_path, "dataprep", "jrn520_taxa", "plant_list", sep="/")
 
 # Output data file 1 name
 f_out <- "jrn520001_JornadaPlantList.csv"
 
-# Read John's plant list file
-# The original format (Plntalfa._20220303.txt) is pretty tough to parse so it
+# Read the current plant list file. Was originally assembled by Darren, using
+# John Anderson's list and one from Justin Van Zee.
+# John's original format (Plntalfa._20220303.txt) was pretty tough to parse so it
 # has been converted to an Excel sheet
 f_in1 <- "JRN_plant_species_list_main.xlsx"
 
 # Load data.
-df_in <- read_xlsx(paste0(source.path, "/", f_in1), skip=4, na=c('.', '', ' ', 'NA'))
+df_in <- read_xlsx(paste0(in_path, "/", f_in1), skip=4, na=c('.', '', ' ', 'NA'))
 names(df_in) <- tolower(names(df_in))
 
 # Add a binomial name column
@@ -31,6 +30,7 @@ sapply(df, function(x) sum(is.na(x)))
 
 library(taxadb)
 df['itis_id'] <- get_ids(df$bin_usda)
+df['itis_id2'] <- get_ids(df$bin_lter)
 
 df[is.na(df$itis_id),]
 # Echinochloa crus-galli doesn't resolve to ITIS - should be ITIS:502210

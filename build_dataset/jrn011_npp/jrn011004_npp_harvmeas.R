@@ -1,4 +1,4 @@
-# ds004_harvmeas.R
+# jrn011004_npp_harvmeas.R
 # formerly: build_dataset.210011004.R
 # 
 
@@ -20,7 +20,7 @@ f_out <- paste(out_path, "jrn011004_npp_ref_harvest_meas.test.csv", sep='/')
 #   select(-USDA_code, -Species_binomial, -form, -habit, -cpath)
 
 # OR - just read straight from his spreadsheet
-df_in = read_excel(paste(entry.path, 'Npp_Harv',
+df_in = read_excel(paste(entry_path, 'Npp_Harv',
                    'nppharv_dataentry_1989-current.xlsx', sep='/'),
                    sheet='pq_for_IM_id-011004', na=c('NA', ''),
                    col_types = c('numeric', 'text', 'date', rep('text',3),
@@ -29,11 +29,6 @@ df_in = read_excel(paste(entry.path, 'Npp_Harv',
 
 # Check for NAs and unique values of catvars
 sapply(df_in, function(x) sum(is.na(x)))
-
-# Get the taxonomic merge code
-## The chdir argument lets the sourced script use relative paths
-source('R/taxa_code_merge.R', chdir=TRUE)
-tm <- merge_crossref_taxa(df_in, 'spp', paste(im.path, 'TaxonomicCoverage', sep='/'))
 
 df.export <- df_in
 #df.export <- tm$merged %>%
@@ -56,16 +51,21 @@ write.csv(df.export, f_out, quote=F, row.names=F)
 # Output data file name
 f_out <- paste(out_path, "jrn011004_plant_codes.csv", sep='/')
 
+# Get the taxonomic merge code
+## The chdir argument lets the sourced script use relative paths
+source('R/taxa_code_merge.R', chdir=TRUE)
+tm <- match_lter_codes(df_in, 'spp', im_path)
+
 df.plantlist <- tm$plant_list %>%
-  select(everything(), -usda_plants_crossref_comment)
+  select(everything())
 
 # Note that extra forms and cpaths are in the database for these (categories
 # that may not appear in data)
 unique(df.plantlist$form)
 unique(df.plantlist$habit)
 unique(df.plantlist$cpath)
-unique(df.plantlist$spp) # 226
-unique(df.plantlist$USDA_code) # 165
+unique(df.plantlist$lter_code) # 226
+unique(df.plantlist$usda_code) # 165
 
 # Export df.export as a csv to current directory
 options(scipen=999)   # turns of scientific notation

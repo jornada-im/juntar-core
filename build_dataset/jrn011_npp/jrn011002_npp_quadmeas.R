@@ -1,4 +1,4 @@
-# ds002_quadmeas.R
+# jrn011002_quadmeas.R
 # formerly: build_dataset.210011002.R
 # 
 
@@ -56,20 +56,19 @@ df1 %>% filter(spp=='MISS') %>% count() # so is miss the same as NONE?
 # These files vary a little in format (columns come and go), and I don't
 # really trust the taxonomic columns
 count <- 1
-for (y in c(2018, 2019, 2020, 2021, 2022, 2023, 2024)){
-  fname_w <- paste0(in_path, '/processed/nppq', y, 'w_gm.DAT')
-  df_w <- read_delim(fname_w, delim=' ', na = c(".", "", "NA"))
-  fname_s <- paste0(in_path, '/processed/nppq', y, 's_gm.DAT')
-  df_s <- read_delim(fname_s, delim=' ', na = c(".", "", "NA"))
-  fname_f <- paste0(in_path, '/processed/nppq', y, 'f_gm.DAT')
-  df_f <- read_delim(fname_f, delim=' ', na = c(".", "", "NA"))
-  if (count == 1){
-    df2 <- bind_rows(df_w, df_s, df_f)
-  } else {
-    df2 <- bind_rows(df2, df_w, df_s, df_f)
+for (y in c(2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025)){
+  for (s in c("w", "s", "f")){
+    fname <- paste0(in_path, '/processed/nppq', y, s, '_gm.DAT')
+    df <- read_delim(fname, delim=' ', na = c(".", "", "NA"))
+    if (count == 1 & s == "w"){
+      df2 <- df
+    } else {
+      df2 <- bind_rows(df2, df)
+    }
   }
   count <- count + 1
 }
+
 # Reformat df2 a little bit
 df2 <- df2 %>% mutate(
   date = as.Date(date,"%m/%d/%Y"),
@@ -119,7 +118,7 @@ sapply(df.all, function(x) sum(is.na(x)))
 # Get the taxonomic merge code
 ## The chdir argument lets the sourced script use relative paths
 source('R/taxa_code_merge.R', chdir=TRUE)
-tm <- merge_crossref_taxa(df.all, 'spp', paste(im.path, 'TaxonomicCoverage', sep='/'))
+tm <- match_lter_codes(df.all, 'spp', im_path)
 
 unmapped <- tm$unmapped_codes
 # Check record...
