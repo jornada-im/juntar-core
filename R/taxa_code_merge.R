@@ -23,6 +23,7 @@ match_lter_codes <- function(df,
         df_ltercol,
         im_path = "",
         df_keepcol = NULL, # An additional set of colums to retain in the output
+        merge_traits = TRUE,
 				crossref_matchcol = "field_code",
 				crossref_authcol = "usda_code"){
   # Get the paths
@@ -30,8 +31,14 @@ match_lter_codes <- function(df,
   # Load the LTER field codes (lter_field_codes_YYYYMMDD) file, which lists all
   # known field codes and links them to accepted LTER codes and taxonomic
   # authority codes.
-  crossref <- read_csv(path$current_field_codes, na=c("",".","NA"), skip=2) %>%
-    select(!(is_cover:comment))
+  if (merge_traits){
+    crossref <- read_csv(path$current_field_codes, na=c("",".","NA"), skip=2) %>%
+      select(!(is_cover:in_use) & !(project_relation:comment))
+  } else {
+    crossref <- read_csv(path$current_field_codes, na=c("",".","NA"), skip=2) %>%
+      select(!(is_cover:comment))
+  }
+  
 
   # Get a list of unique JRN LTER species codes in the data set
   spp_codes <- df %>%
