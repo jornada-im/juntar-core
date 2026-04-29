@@ -1,18 +1,13 @@
-# Ask the user for the root path - usually the Field Crew/IM Sharepoint root
-choose_directory = function(caption = "Select the path to the Field Crew/IM directory (Documents_Jornada-FC-IM) synced to your local computer. ") {
-  message(caption)
-  env <- Sys.getenv()
-  # If on MS Windows use this
-  if (exists("utils::choose.dir")) { 
-    utils::choose.dir(caption = caption, default = env[["HOME"]])
-  # Linux and MacOS use this
-  } else {
-    tcltk::tk_choose.dir(caption = caption, default = env[["HOME"]])
-  }
+# Root path is set via JORNADA_ROOT in the project .Renviron file.
+# Copy .Renviron.example to .Renviron and fill in your local path.
+# Or, usethis::edit_r_environ("project") opens it for editing.
+root_path <- Sys.getenv("JORNADA_ROOT")
+if (root_path == "") {
+  stop("JORNADA_ROOT is not set. Add it to the project .Renviron file (see .Renviron.example).")
 }
 
-#Set the Root path
-root_path <- choose_directory()
-# Set other paths
-entry_path <- paste(root_path, "dataentry", sep="/")
-im_path <- paste(root_path, "jornada_im", sep="/")
+entry_path   <- file.path(root_path, "dataentry")
+im_path      <- file.path(root_path, "jornada_im")
+#prep_path    <- file.path(root_path, "jornada_im/dataprep/jrn011_npp")
+#biomass_path <- file.path(prep_path, "biomass")
+#anpp_path    <- file.path(prep_path, "anpp")

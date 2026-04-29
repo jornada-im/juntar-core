@@ -7,14 +7,22 @@ plants_path <- paste(im_path, "dataprep", "jrn520_taxa", "plants", sep="/")
 
 ## Primary Jornada plant list
 mainlist <- read_excel(paste(plants_path, "jornada_plant_list_MAIN.xlsx", sep="/"),
-                     skip=4, na = c(".", "NA"))
-main_present <- mainlist |> filter(LTER_core=="present") # Filter for taxa observed at the Jornada
+                     skip=4, na = c(".", "NA")) |>
+  rename_with(tolower) |>
+  rename(cpath=pathway) |>
+  mutate(spbinomial = paste(genus_lter, species_lter, sep=" ")) # create sp binomial
+main_present <- mainlist |> filter(lter_core=="present") # Filter for taxa observed at the Jornada
 ## John Anderson's list
 johnslist <- read_excel(paste(plants_path, "0_test-merge1_20260123.xlsx", sep="/"),
-                        skip=2, na = c(".", "NA"))
+                        skip=2, na = c(".", "NA")) |>
+  rename_with(tolower) |>
+  rename(lter_code=lter_spp, usda_code=`current usda code`, spbinomial=lter_full_species_name) |>
+  filter(nchar(lter_code) < 5)
 ## Kelly Allred's Flora of the Jornada Plain list
-allredlist <- read_csv(paste(plants_path, "allred_jornada_spp_table_claude.csv", sep="/"),
+allredlist <- read_csv(paste(plants_path, "allred_jornada_spp_table_claude_v3.csv", sep="/"),
                            na = c(".", "NA",""))
+
+
 # The JRN LTER field codes list
 fieldlist <- read_excel(paste(im_path, "dataprep", "jrn520_taxa", "fieldcodes",
                             "lter_field_codes_MAIN.xlsx", sep="/"), skip=2)
@@ -41,3 +49,13 @@ john_USDA_not_in_main <- johnslist[!johnslist$`CURRENT USDA code` %in% mainlist$
 john_LTER_not_in_field <- johnslist[!johnslist$LTER_spp %in% fieldlist$field_code,]
 main_LTER_not_in_field <- mainlist[!mainlist$LTER_code %in% fieldlist$field_code,]
 allred_LTER_not_in_field <- allredlist[!allredlist$`LTER Code` %in% fieldlist$field_code,]
+
+# Still some issues with this
+crosswalk <- mainlist[c('lter_code', 'spbinomial', 'usda_code', 'habit', 'form', 'cpath')] %>%
+  full_join(johnslist[c('lter_code', 'spbinomial', 'usda_code', 'habit', 'form', 'cpath')],
+  by = "lter_code", suffix = c("_main","_john"), keep = TRUE) |>
+  left_join(allredlist[c('lter_code', 'spbinomial', 'usda_code')], by = join_by("lter_code_main"=="lter_code"),
+            keep=TRUE, suffix=c("_allred","_allred")) |>
+  select(starts_with("lter_code"), starts_with("usda_code"), starts_with('spbinomial'),
+  ends_with("main"), ends_with("john"))
+  

@@ -1,0 +1,6 @@
+# Copy this file to .Renviron and set JORNADA_ROOT to the local path of the
+# Field Crew/IM SharePoint directory (Documents_Jornada-FC-IM).
+# Or, usethis::edit_r_environ("project") opens .Renviron for editing.
+# Restart R after making changes.
+
+JORNADA_ROOT=/path/to/Documents_Jornada-FC-IM
