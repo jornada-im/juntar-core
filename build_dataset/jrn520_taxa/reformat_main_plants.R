@@ -13,7 +13,7 @@ Output 3: Traits list?
 
 Steps (1-4 done prior to this script)
 
-1. Standardize and rename column headers in`main` and `john`, and standardize on "subsp." for infraspecific rank.
+1. Standardize and rename column headers in`main` and `john`, and standardize on 'subsp.' for infraspecific rank.
 2. Drop generic and higher taxa (length of `lter_code` > 4) from `john`
 3. Drop unnecessary columns in `main` list (Genus_USDA, Species_USDA, further_rank_USDA)
 4. Create a `sciname_auth` column in the `allred` table by joining columns
